@@ -16,5 +16,3 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 include(../jdns/jdns.pri)
-
-HEADERS +=
