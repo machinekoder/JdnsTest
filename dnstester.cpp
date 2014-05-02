@@ -8,10 +8,23 @@ DnsTester::DnsTester(QObject *parent) :
 
     connect(m_jdns, SIGNAL(resultsReady(int,QJDns::Response)),
             this, SLOT(resultsReady(int,QJDns::Response)));
+    connect(m_jdns, SIGNAL(published(int)),
+            this, SLOT(published(int)));
+    connect(m_jdns, SIGNAL(error(int,QJDns::Error)),
+            this, SLOT(error(int,QJDns::Error)));
+    connect(m_jdns, SIGNAL(shutdownFinished()),
+            this, SLOT(shutdownFinished()));
+    connect(m_jdns, SIGNAL(debugLinesReady()),
+            this, SLOT(debugLinesReady()));
 
     m_jdns->init(QJDns::Multicast, QHostAddress::Any);
 
     m_jdns->queryStart("_sane-port._tcp.local", QJDns::Ptr);
+}
+
+DnsTester::~DnsTester()
+{
+    m_jdns->shutdown();
 }
 
 void DnsTester::debugRecord(const QJDns::Record &record)
@@ -33,7 +46,7 @@ void DnsTester::debugRecord(const QJDns::Record &record)
 
 void DnsTester::resultsReady(int id, const QJDns::Response &results)
 {
-    qDebug() << "result" << id;
+    qDebug() << "result" << id << results.answerRecords.size();
 
     qDebug() << "------------------ Records --------------------";
     foreach(QJDns::Record record, results.answerRecords)
@@ -52,4 +65,27 @@ void DnsTester::resultsReady(int id, const QJDns::Response &results)
     {
         debugRecord(record);
     }
+}
+
+void DnsTester::published(int id)
+{
+    qDebug() << "================== published ===================";
+    qDebug() << id;
+}
+
+void DnsTester::error(int id, QJDns::Error e)
+{
+    qDebug() << "==================== error ====================";
+    qDebug() << id << e;
+}
+
+void DnsTester::shutdownFinished()
+{
+    qDebug() << "=============== shutdown finished ==============";
+}
+
+void DnsTester::debugLinesReady()
+{
+    qDebug() << "=================== debug ======================";
+    qDebug() << m_jdns->debugLines().join("\n");
 }

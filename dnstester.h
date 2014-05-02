@@ -9,6 +9,7 @@ class DnsTester : public QObject
     Q_OBJECT
 public:
     explicit DnsTester(QObject *parent = 0);
+    ~DnsTester();
 
 signals:
 
@@ -21,6 +22,10 @@ private:
 
 private slots:
     void resultsReady(int id, const QJDns::Response &results);
+    void published(int id);
+    void error(int id, QJDns::Error e);
+    void shutdownFinished();
+    void debugLinesReady();
 };
 
 #endif // DNSTESTER_H
