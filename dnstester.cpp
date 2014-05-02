@@ -14,6 +14,23 @@ DnsTester::DnsTester(QObject *parent) :
     m_jdns->queryStart("_sane-port._tcp.local", QJDns::Ptr);
 }
 
+void DnsTester::debugRecord(const QJDns::Record &record)
+{
+    qDebug() << "Address:" << record.address.toString();
+    qDebug() << "Cpu:" << record.cpu;
+    qDebug() << "OS:" << record.os;
+    qDebug() << "Name:" << record.name;
+    qDebug() << "Port:" << record.port;
+    qDebug() << "Texts:" << record.texts;
+    qDebug() << "Type:" << record.type;
+    qDebug() << "Priority:" << record.priority;
+    qDebug() << "Owner:" << record.owner;
+    qDebug() << "Have known:" << record.haveKnown;
+    qDebug() << "RData:" << record.rdata;
+    qDebug() << "TTL:" << record.ttl;
+    qDebug() << "Weight:" << record.weight;
+}
+
 void DnsTester::resultsReady(int id, const QJDns::Response &results)
 {
     qDebug() << "result" << id;
@@ -21,45 +38,18 @@ void DnsTester::resultsReady(int id, const QJDns::Response &results)
     qDebug() << "------------------ Records --------------------";
     foreach(QJDns::Record record, results.answerRecords)
     {
-        qDebug() << "Address:" << record.address;
-        qDebug() << "Cpu:" << record.cpu;
-        qDebug() << "OS:" << record.os;
-        qDebug() << "Name:" << record.name;
-        qDebug() << "Port:" << record.port;
-        qDebug() << "Texts:" << record.texts;
-        qDebug() << "Type:" << record.type;
-        qDebug() << "Priority:" << record.priority;
-        qDebug() << "Owner:" << record.owner;
-        qDebug() << "Have known:" << record.haveKnown;
+        debugRecord(record);
     }
 
     qDebug() << "--------------- Authority Records --------------";
     foreach(QJDns::Record record, results.authorityRecords)
     {
-        qDebug() << "Address:" << record.address;
-        qDebug() << "Cpu:" << record.cpu;
-        qDebug() << "OS:" << record.os;
-        qDebug() << "Name:" << record.name;
-        qDebug() << "Port:" << record.port;
-        qDebug() << "Texts:" << record.texts;
-        qDebug() << "Type:" << record.type;
-        qDebug() << "Priority:" << record.priority;
-        qDebug() << "Owner:" << record.owner;
-        qDebug() << "Have known:" << record.haveKnown;
+        debugRecord(record);
     }
 
     qDebug() << "-------------- Additional Records --------------";
     foreach(QJDns::Record record, results.additionalRecords)
     {
-        qDebug() << "Address:" << record.address;
-        qDebug() << "Cpu:" << record.cpu;
-        qDebug() << "OS:" << record.os;
-        qDebug() << "Name:" << record.name;
-        qDebug() << "Port:" << record.port;
-        qDebug() << "Texts:" << record.texts;
-        qDebug() << "Type:" << record.type;
-        qDebug() << "Priority:" << record.priority;
-        qDebug() << "Owner:" << record.owner;
-        qDebug() << "Have known:" << record.haveKnown;
+        debugRecord(record);
     }
 }
